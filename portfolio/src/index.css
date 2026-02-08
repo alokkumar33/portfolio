@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+/* ===============================
+   SMOOTH SCROLLING
+   =============================== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===============================
+   PREMIUM ANIMATED BACKGROUND
+   =============================== */
+@keyframes premiumGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-bg {
+  background-size: 300% 300%;
+  animation: premiumGradient 25s ease-in-out infinite;
+}
+
+/* ===============================
+   FLOATING GLOW ORBS (HERO)
+   =============================== */
+@keyframes floatGlow {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-18px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.glow-orb {
+  animation: floatGlow 8s ease-in-out infinite;
+}
+
+/* ===============================
+   TEXT REVEAL ANIMATION
+   =============================== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.9s ease forwards;
+}
+
+/* ===============================
+   SKILLS MARQUEE (SLOW + PREMIUM)
+   =============================== */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ===============================
+   HERO EXTRA ANIMATIONS (NEW)
+   =============================== */
+
+/* Slow rotating ring */
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 20s linear infinite;
+}
+
+/* Floating tech icons */
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Animation delays */
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+}
