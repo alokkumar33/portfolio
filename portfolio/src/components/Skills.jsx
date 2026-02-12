@@ -6,8 +6,16 @@ import {
   FaGitAlt,
   FaGithub,
   FaNodeJs,
+  FaCode,          // ✅ Safe VS Code fallback
 } from "react-icons/fa";
-import { SiTailwindcss, SiExpress, SiMongodb } from "react-icons/si";
+
+import {
+  SiTailwindcss,
+  SiExpress,
+  SiMongodb,
+  SiKaggle,
+  SiFirebase,
+} from "react-icons/si";
 
 const skills = [
   { icon: <FaHtml5 />, name: "HTML", color: "text-orange-500" },
@@ -20,27 +28,30 @@ const skills = [
   { icon: <SiMongodb />, name: "MongoDB", color: "text-green-600" },
   { icon: <FaGitAlt />, name: "Git", color: "text-orange-600" },
   { icon: <FaGithub />, name: "GitHub", color: "text-slate-200" },
+
+  // Tools
+  { icon: <FaCode />, name: "VS Code", color: "text-blue-500" }, // SAFE
+  { icon: <SiFirebase />, name: "Firebase", color: "text-yellow-400" },
+  { icon: <SiKaggle />, name: "Kaggle", color: "text-blue-400" },
 ];
 
 export default function Skills() {
   return (
-    <section id="skills" className="py-24 w-full">
-      
-      {/* Title */}
-      <h2 className="text-3xl font-bold text-center mb-16 fade-up">
-        Skills
-      </h2>
+    <section id="skills" className="py-24 w-full overflow-hidden">
 
-      {/* Marquee */}
-      <div className="relative w-full overflow-hidden">
-        <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
+      <div className="text-center mb-16">
+        <h2 className="text-3xl font-bold">Skills & Tools</h2>
+        <div className="mx-auto mt-4 w-20 h-1 bg-gradient-to-r from-teal-400 to-blue-500 rounded-full" />
+      </div>
 
+      <div className="overflow-hidden relative w-full">
+        <div className="flex gap-8 animate-marquee">
           {[...skills, ...skills].map((skill, index) => (
             <div
               key={index}
-              className="mx-4 min-w-[150px]
+              className="min-w-[180px]
               flex flex-col items-center justify-center
-              bg-slate-800/60 backdrop-blur-md
+              bg-slate-800/70 backdrop-blur-md
               border border-slate-700
               rounded-2xl p-6
               hover:-translate-y-2 hover:scale-110
@@ -52,14 +63,14 @@ export default function Skills() {
                 {skill.icon}
               </div>
 
-              <p className="text-sm text-slate-200 text-center font-medium">
+              <p className="text-sm text-slate-200 font-medium text-center">
                 {skill.name}
               </p>
             </div>
           ))}
-
         </div>
       </div>
+
     </section>
   );
 }

@@ -1,129 +1,322 @@
 @import "tailwindcss";
 
-/* ===============================
-   SMOOTH SCROLLING
-   =============================== */
+/* ==========================================
+   🌍 GLOBAL RESET
+========================================== */
+
 html {
   scroll-behavior: smooth;
 }
 
-/* ===============================
-   PREMIUM ANIMATED BACKGROUND
-   =============================== */
-@keyframes premiumGradient {
+body {
+  margin: 0;
+  background: #020617;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  caret-color: transparent;
+}
+
+/* ==========================================
+   🌌 BASE SPACE GRADIENT
+========================================== */
+
+.space-base {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(59,130,246,0.08), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(168,85,247,0.08), transparent 40%),
+    linear-gradient(
+      180deg,
+      #0b1120 0%,
+      #050816 50%,
+      #020617 100%
+    );
+  z-index: -5;
+}
+
+/* ==========================================
+   ✨ STAR TWINKLE
+========================================== */
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ==========================================
+   🌌 STAR DEPTH LAYERS
+========================================== */
+
+@keyframes starMoveSlow {
+  from { transform: translateY(0); }
+  to { transform: translateY(-1500px); }
+}
+
+@keyframes starMoveFast {
+  from { transform: translateY(0); }
+  to { transform: translateY(-3000px); }
+}
+
+.stars-back,
+.stars-front {
+  position: fixed;
+  inset: 0;
+  background-repeat: repeat;
+  pointer-events: none;
+}
+
+/* Small distant stars */
+.stars-back {
+  background-image:
+    radial-gradient(1px 1px at 5% 10%, white, transparent),
+    radial-gradient(1px 1px at 15% 40%, white, transparent),
+    radial-gradient(1px 1px at 25% 70%, white, transparent),
+    radial-gradient(1px 1px at 35% 20%, white, transparent),
+    radial-gradient(1px 1px at 45% 60%, white, transparent),
+    radial-gradient(1px 1px at 55% 30%, white, transparent),
+    radial-gradient(1px 1px at 65% 80%, white, transparent),
+    radial-gradient(1px 1px at 75% 50%, white, transparent),
+    radial-gradient(1px 1px at 85% 15%, white, transparent),
+    radial-gradient(1px 1px at 95% 65%, white, transparent);
+  opacity: 0.4;
+  animation: starMoveSlow 220s linear infinite;
+}
+
+/* Bigger closer stars */
+.stars-front {
+  background-image:
+    radial-gradient(2px 2px at 10% 50%, #ffffff, transparent),
+    radial-gradient(2px 2px at 30% 80%, #ffffff, transparent),
+    radial-gradient(2px 2px at 50% 30%, #ffffff, transparent),
+    radial-gradient(2px 2px at 70% 60%, #ffffff, transparent),
+    radial-gradient(2px 2px at 90% 20%, #ffffff, transparent);
+  opacity: 0.8;
+  animation: starMoveFast 160s linear infinite;
+}
+
+/* Subtle twinkle overlay */
+.stars-front::after,
+.stars-back::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+/* ==========================================
+   ☄️ COMETS
+========================================== */
+
+@keyframes cometMove {
   0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.animated-bg {
-  background-size: 300% 300%;
-  animation: premiumGradient 25s ease-in-out infinite;
-}
-
-/* ===============================
-   FLOATING GLOW ORBS (HERO)
-   =============================== */
-@keyframes floatGlow {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-18px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-.glow-orb {
-  animation: floatGlow 8s ease-in-out infinite;
-}
-
-/* ===============================
-   TEXT REVEAL ANIMATION
-   =============================== */
-@keyframes fadeUp {
-  from {
+    transform: translate(-400px, -300px) rotate(45deg);
     opacity: 0;
-    transform: translateY(20px);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  15% { opacity: 1; }
+  100% {
+    transform: translate(1600px, 900px) rotate(45deg);
+    opacity: 0;
   }
 }
 
-.fade-up {
-  animation: fadeUp 0.9s ease forwards;
+.comet {
+  position: fixed;
+  width: 200px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.9),
+    rgba(255,255,255,0.4),
+    transparent
+  );
+  top: 20%;
+  left: -10%;
+  animation: cometMove 16s linear infinite;
+  filter: blur(1px);
+  opacity: 0.8;
+  pointer-events: none;
 }
 
-/* ===============================
-   SKILLS MARQUEE (SLOW + PREMIUM)
-   =============================== */
+.delay-comet {
+  animation-delay: 8s;
+  top: 35%;
+}
+
+/* ==========================================
+   🚀 ROCKETS (SUBTLE + PREMIUM)
+========================================== */
+
+@keyframes rocketFloat {
+  0% { transform: translateY(100vh); opacity: 0; }
+  20% { opacity: 0.6; }
+  100% { transform: translateY(-200px); opacity: 0; }
+}
+
+.rocket {
+  position: fixed;
+  bottom: -200px;
+  width: 22px;
+  height: 50px;
+  background: linear-gradient(to bottom, #60a5fa, #a855f7);
+  clip-path: polygon(
+    50% 0%,
+    80% 20%,
+    80% 80%,
+    50% 100%,
+    20% 80%,
+    20% 20%
+  );
+  filter: drop-shadow(0 0 6px #60a5fa);
+  animation: rocketFloat 30s linear infinite;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.rocket-1 { left: 20%; animation-delay: 0s; }
+.rocket-2 { left: 65%; animation-delay: 12s; }
+
+/* ==========================================
+   🚀 SECTION REVEAL
+========================================== */
+
+section:first-of-type {
+  opacity: 1;
+  transform: none;
+}
+
+section {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 0.7s ease;
+}
+
+section.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================
+   ♿ ACCESSIBILITY
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* ==========================================
+   🔁 SKILLS MARQUEE (RIGHT → LEFT)
+========================================== */
+
 @keyframes marquee {
-  from {
-    transform: translateX(0);
+  0% {
+    transform: translateX(0%);
   }
-  to {
+  100% {
     transform: translateX(-50%);
   }
 }
 
 .animate-marquee {
-  animation: marquee 40s linear infinite;
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
 }
 
 .animate-marquee:hover {
   animation-play-state: paused;
 }
 
-/* ===============================
-   HERO EXTRA ANIMATIONS (NEW)
-   =============================== */
 
-/* Slow rotating ring */
-@keyframes spinSlow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
 }
 
-.animate-spin-slow {
-  animation: spinSlow 20s linear infinite;
+.animate-marquee {
+  animation: marquee 25s linear infinite;
 }
 
-/* Floating tech icons */
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0);
-  }
+
+/* 3D Flip Utilities */
+
+.perspective {
+  perspective: 1200px;
 }
 
-.animate-float {
-  animation: float 4s ease-in-out infinite;
+.transform-style {
+  transform-style: preserve-3d;
 }
 
-/* Animation delays */
-.delay-200 {
-  animation-delay: 0.2s;
+.preserve-3d {
+  transform-style: preserve-3d;
 }
 
-.delay-500 {
-  animation-delay: 0.5s;
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.group-hover\:rotate-y-180:hover {
+  transform: rotateY(180deg);
+}
+
+
+@keyframes floatSlow {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-40px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-floatSlow {
+  animation: floatSlow 12s ease-in-out infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% }
+  100% { background-position: 200% }
+}
+
+.animate-gradientMove {
+  background-size: 200%;
+  animation: gradientMove 4s linear infinite;
+}
+
+
+/* Code background animation */
+.code-lines {
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(0, 255, 200, 0.1),
+    rgba(0, 255, 200, 0.1) 1px,
+    transparent 1px,
+    transparent 30px
+  );
+  animation: scrollCode 20s linear infinite;
+}
+
+@keyframes scrollCode {
+  from { transform: translateY(0); }
+  to { transform: translateY(-200px); }
+}
+
+/* Floating tag animation */
+@keyframes floatTag {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-floatTag {
+  animation: floatTag 3s ease-in-out infinite;
 }
