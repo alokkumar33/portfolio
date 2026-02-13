@@ -1,145 +1,144 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 
 export default function Navbar() {
   const [active, setActive] = useState("home");
-  const [scrolled, setScrolled] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navRef = useRef(null);
 
   /* ===============================
-     Scroll handling
+     3D Tilt Effect
   =============================== */
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight;
+  const handleMouseMove = (e) => {
+    const nav = navRef.current;
+    const rect = nav.getBoundingClientRect();
 
-      setProgress((scrollTop / docHeight) * 100);
-      setScrolled(scrollTop > 20);
-    };
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
 
-  /* Lock body scroll when menu open */
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "auto";
-  }, [menuOpen]);
+    const rotateX = -(y - centerY) / 25;
+    const rotateY = (x - centerX) / 25;
 
-  /* 🔥 Updated Links */
+    nav.style.transform = `
+      perspective(1200px)
+      rotateX(${rotateX}deg)
+      rotateY(${rotateY}deg)
+    `;
+  };
+
+  const resetTilt = () => {
+    navRef.current.style.transform =
+      "perspective(1200px) rotateX(0deg) rotateY(0deg)";
+  };
+
+  /* ===============================
+     Smooth Scroll
+  =============================== */
+  const scrollToSection = (id) => {
+    setMenuOpen(false);
+    setActive(id);
+
+    if (id === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 90;
+      const top =
+        element.getBoundingClientRect().top +
+        window.pageYOffset -
+        offset;
+
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
+
   const links = [
     { id: "home", label: "home" },
     { id: "about", label: "about" },
     { id: "education", label: "education" },
-    { id: "experience", label: "experience & training" },
+    { id: "experience", label: "experience" },
     { id: "projects", label: "projects" },
-    { id: "skills", label: "skill & tools" },
+    { id: "skills", label: "skills & tools" },
     { id: "contact", label: "contact" },
   ];
 
   return (
     <>
-      {/* 🔥 Scroll Progress Bar */}
-      <div className="fixed top-0 left-0 w-full h-[2px] z-[60]">
+      {/* ================= NAVBAR ================= */}
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-6xl px-6">
         <div
-          className="h-full bg-gradient-to-r from-teal-400 to-blue-500 transition-all duration-200"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-
-      {/* 🌊 Navbar */}
-      <nav
-        className={`fixed top-0 left-0 w-full z-50
-        transition-all duration-500
-        ${scrolled ? "backdrop-blur-xl" : ""}`}
-      >
-        <div
-          className={`mx-4 md:mx-6 mt-4 px-6 py-3 rounded-2xl
+          ref={navRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={resetTilt}
+          className="
+          relative
           flex justify-between items-center
-          transition-all duration-500
-          ${
-            scrolled
-              ? "bg-slate-900/80 border border-slate-700 shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
-              : "bg-slate-900/60 border border-slate-800"
-          }`}
+          px-8 py-4
+          rounded-2xl
+          backdrop-blur-3xl
+          bg-white/5
+          border border-white/10
+          shadow-[0_20px_80px_rgba(0,0,0,0.6)]
+          transition-transform duration-300
+          overflow-hidden
+          "
         >
-          {/* 🔷 Logo */}
+          {/* ✨ Moving Light Reflection */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute -left-1/2 top-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent rotate-12 animate-lightMove" />
+          </div>
+
+          {/* LOGO */}
           <h1
-            className="text-xl font-bold tracking-wide cursor-pointer
-            hover:text-teal-400 transition duration-300"
+            onClick={() => scrollToSection("home")}
+            className="text-xl font-bold cursor-pointer tracking-wide
+            text-white hover:text-teal-400 transition duration-300"
           >
             Alok<span className="text-teal-400">.dev</span>
           </h1>
 
-          {/* 🖥️ Desktop Links */}
-          <ul className="hidden md:flex gap-8 text-sm font-medium relative">
+          {/* Desktop Links */}
+          <ul className="hidden md:flex gap-8 text-sm font-medium">
             {links.map((item) => (
-              <li key={item.id} className="relative">
-                <a
-                  href={`#${item.id}`}
-                  onClick={() => setActive(item.id)}
-                  className={`capitalize transition-colors duration-300
-                  ${
+              <li key={item.id}>
+                <button
+                  onClick={() => scrollToSection(item.id)}
+                  className={`capitalize transition duration-300 ${
                     active === item.id
                       ? "text-teal-400"
                       : "text-slate-300 hover:text-white"
                   }`}
                 >
                   {item.label}
-                </a>
-
-                {/* Animated underline */}
-                {active === item.id && (
-                  <span
-                    className="absolute -bottom-2 left-0 w-full h-[2px]
-                    bg-gradient-to-r from-teal-400 to-blue-500
-                    rounded-full animate-pulse"
-                  />
-                )}
+                </button>
               </li>
             ))}
           </ul>
 
-          {/* 📄 Resume (Desktop) */}
-          <div className="hidden md:block">
-            <a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 text-sm font-semibold rounded-lg
-              bg-gradient-to-r from-teal-500 to-blue-500
-              text-black hover:scale-105
-              hover:shadow-[0_0_25px_rgba(45,212,191,0.6)]
-              transition"
-            >
-              Resume
-            </a>
-          </div>
-
-          {/* 📱 Mobile Menu Button */}
+          {/* Mobile Button */}
           <button
             onClick={() => setMenuOpen(true)}
-            className="md:hidden text-2xl text-slate-200 hover:text-teal-400 transition"
+            className="md:hidden text-2xl text-white"
           >
             <FiMenu />
           </button>
         </div>
       </nav>
 
-      {/* 📱 Mobile Menu Overlay */}
+      {/* ================= MOBILE MENU ================= */}
       <div
-        className={`fixed inset-0 z-[70]
-        bg-black/60 backdrop-blur-sm
-        transition-opacity duration-300
-        ${menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={`fixed inset-0 z-[70] bg-black/70 backdrop-blur-sm transition-opacity duration-300 ${
+          menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
         onClick={() => setMenuOpen(false)}
       />
 
-      {/* 📱 Mobile Menu Panel */}
       <div
         className={`fixed top-0 right-0 h-full w-[75%] max-w-sm z-[80]
         bg-slate-900 border-l border-slate-700
@@ -147,49 +146,25 @@ export default function Navbar() {
         ${menuOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         <div className="p-6 flex flex-col h-full">
-          {/* Close */}
           <button
             onClick={() => setMenuOpen(false)}
-            className="self-end text-2xl text-slate-300 hover:text-teal-400 transition"
+            className="self-end text-2xl text-slate-300"
           >
             <FiX />
           </button>
 
-          {/* Links */}
           <ul className="mt-10 flex flex-col gap-6 text-lg font-medium">
             {links.map((item) => (
               <li key={item.id}>
-                <a
-                  href={`#${item.id}`}
-                  onClick={() => {
-                    setActive(item.id);
-                    setMenuOpen(false);
-                  }}
-                  className={`capitalize transition
-                  ${
-                    active === item.id
-                      ? "text-teal-400"
-                      : "text-slate-300 hover:text-white"
-                  }`}
+                <button
+                  onClick={() => scrollToSection(item.id)}
+                  className="capitalize text-slate-300 hover:text-white transition"
                 >
                   {item.label}
-                </a>
+                </button>
               </li>
             ))}
           </ul>
-
-          {/* Resume */}
-          <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-auto px-5 py-3 text-center font-semibold rounded-xl
-            bg-gradient-to-r from-teal-500 to-blue-500
-            text-black hover:shadow-[0_0_30px_rgba(45,212,191,0.6)]
-            transition"
-          >
-            Resume
-          </a>
         </div>
       </div>
     </>
