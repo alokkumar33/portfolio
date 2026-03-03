@@ -37,7 +37,7 @@ export default function Education() {
             </p>
 
             <p className="mt-4 text-slate-300 text-center">
-              NIST University
+               NIST University
             </p>
 
             <p className="text-slate-400 mt-2">2023 – 2027</p>
